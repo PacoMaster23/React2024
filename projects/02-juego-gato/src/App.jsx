@@ -1,38 +1,11 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Children } from 'react'
+import conffeti from "canvas-confetti"
 
+import { Square } from './components/Square'
+import { TURNS } from './constans'
 
-const TURNS = {
-  X: 'x',
-  O: 'o'
-}
-
-
-const Square = ({ children, isSelected, updateBoard, index }) => {
-  const className = `square ${isSelected ? 'is-selected' : ''} `
-
-  const handleCliclk = () => {
-    updateBoard(index)
-  }
-  return (
-    <div onClick={handleCliclk} className={className}>
-      {children}
-    </div>
-  )
-}
-const WINNER_COMBOS= [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
-]
+import { checkEndGame, CheckWinnerFrom } from './logic/board'
+import { WinnerModal } from './components/WinnerModal'
 
 
 
@@ -42,20 +15,13 @@ function App() {
   const [turn, setTurn] = useState(TURNS.X)
   const [winner, setWinner] = useState (null)
 
-  const CheckWinner = (boardToCheck) =>{
-    for (const combo of WINNER_COMBOS){
-      const [a, b, c] = combo
-      if(
-         boardToCheck[a]  &&
-        boardToCheck [a] === boardToCheck [b] &&
-        boardToCheck [a] === boardToCheck [c]
-      ){
-        return boardToCheck [a]
-      }
-    }
-    // si no hay ganador
-    return null
-  } 
+  
+  const resetgame = () =>{
+    setBoard (Array(9).fill(null))
+    setTurn(TURNS.X)
+    setWinner(null)
+  }
+
 
   const updateBoard = (index) => {
     // no se actualiza esta posicion
@@ -72,9 +38,12 @@ function App() {
 
     setTurn(newTurn)
     // revisar si hay ganador
-    const newWinner = CheckWinner(newBoard)
+    const newWinner = CheckWinnerFrom(newBoard)
     if (newWinner){
+      conffeti()
       setWinner (newWinner)
+    }else if(checkEndGame(newBoard)){
+      setWinner(false)
     }
   }
 
@@ -82,6 +51,8 @@ function App() {
 
     <main className='board'>
       <h1>GATO</h1>
+      <button onClick={resetgame}> reset game</button>
+
       <section className='game'>
         {
           board.map((_, index) => {
@@ -108,7 +79,10 @@ function App() {
           {TURNS.O}
 
         </Square>
+
       </section>
+
+        <WinnerModal resetGame={resetgame}winner={winner}/>
     </main>
 
 
