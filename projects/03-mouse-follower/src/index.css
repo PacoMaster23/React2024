@@ -31,13 +31,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: #1a1a1a;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-  color: #f9f9f9;
 }
 
 button {
@@ -52,11 +50,11 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #4960c7;
+  border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
-  outline: 7px auto -webkit-focus-ring-color;
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
@@ -68,6 +66,10 @@ button:focus-visible {
     color: #747bff;
   }
   button {
-    background-color: #5706869c;
+    background-color: #f9f9f9;
   }
+}
+
+body.no-cursor {
+  cursor: none;
 }
